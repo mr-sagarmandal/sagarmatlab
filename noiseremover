@@ -1,0 +1,29 @@
+function spchrepr     %A code to find frequency of noise and remove them. SPfirst toolbox required.
+load speechbad.mat;
+m=xxbad;
+
+b= [1 -2*cos(2*pi*2222/fs) 1];
+c= [1 -2*cos(2*pi*1555/fs) 1];
+l= conv(b, c);
+
+xxgood= conv(m,l );
+% subplot(2,1,1)
+% plot(m)
+% subplot(2,1,2)
+M= freqz(m,1, l);
+
+
+%plot(M)
+
+% subplot(2,1, 1)
+% stem(m)
+% subplot(2,1,2)
+% stem(xxgood)
+
+% subplot(2,1,1)
+%plotspecDB(m,fs,12000,80)
+% subplot(2,1,2)
+%plotspecDB(xxgood,fs,12000,80)
+%soundsc(m, 8000)    
+sound(xxgood, 8000)
+end
