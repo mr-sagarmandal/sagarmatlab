@@ -1,0 +1,65 @@
+function []= hashtagfilter(im1,im2,blnd) %A code which takes in two images and blends them according to the blend chosen
+
+top= double(imread(im1));
+btm= double(imread(im2));
+
+neo= top(:,:,:);
+
+
+if strcmpi(blnd, 'multiply')
+    top(:,:,1)= top(:,:,1)./255;
+    btm(:,:,1)= btm(:,:,1)./255;
+    top(:,:,2)= top(:,:,2)./255;
+    btm(:,:,2)= btm(:,:,2)./255;
+    top(:,:,3)= top(:,:,3)./255;
+    btm(:,:,3)= btm(:,:,3)./255;
+    
+    neo(:,:,1)= top(:,:,1).*btm(:,:,1);
+    neo(:,:,2)= top(:,:,2).*btm(:,:,2);
+    neo(:,:,3)= top(:,:,3).*btm(:,:,3);
+elseif strcmpi(blnd, 'screen')
+    top(:,:,1)= top(:,:,1)./255;
+    btm(:,:,1)= btm(:,:,1)./255;
+    top(:,:,2)= top(:,:,2)./255;
+    btm(:,:,2)= btm(:,:,2)./255;
+    top(:,:,3)= top(:,:,3)./255;
+    btm(:,:,3)= btm(:,:,3)./255;
+    
+    neo(:,:,1)= 1-(1-top(:,:,1)).*(1-btm(:,:,1));
+    neo(:,:,2)= 1-(1-top(:,:,2)).*(1-btm(:,:,2));
+    neo(:,:,3)= 1-(1-top(:,:,3)).*(1-btm(:,:,3));
+elseif strcmpi(blnd, 'overlay')
+    lum=0.3.*btm(:,:,1)+0.59.*btm(:,:,2)+0.11.*btm(:,:,3);
+    lum=lum./255;
+    
+    top(:,:,1)= top(:,:,1)./255;
+    btm(:,:,1)= btm(:,:,1)./255;
+    top(:,:,2)= top(:,:,2)./255;
+    btm(:,:,2)= btm(:,:,2)./255;
+    top(:,:,3)= top(:,:,3)./255;
+    btm(:,:,3)= btm(:,:,3)./255;
+    a= size(lum);
+   
+    for i= 1:a    
+    if lum(i)<0.5
+         neo(:,:,1)= 2.*top(:,:,1).*btm(:,:,1);
+         neo(:,:,2)= 2.*top(:,:,2).*btm(:,:,2);
+         neo(:,:,3)= 2.*top(:,:,3).*btm(:,:,3);
+    else
+       neo(:,:,1)= 1- (2.*(1-top(:,:,1)).*(1-btm(:,:,1)));
+       neo(:,:,2)= 1- (2.*(1-top(:,:,2)).*(1-btm(:,:,2)));
+       neo(:,:,3)= 1- (2.*(1-top(:,:,3)).*(1-btm(:,:,3)));
+    end
+    end
+end
+
+neo(:,:,1)= neo(:,:,1).*255;
+neo(:,:,2)= neo(:,:,2).*255;
+neo(:,:,3)= neo(:,:,3).*255;
+
+newName = [im1(1:end-4) '_' im2(1:end-4) '_' blnd '.png'];
+
+imwrite(uint8(neo), newName);
+
+
+end
