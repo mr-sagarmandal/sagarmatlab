@@ -1,0 +1,40 @@
+function out= primefinder %Finds the number of Primes under a certain number
+in=input('What is the number?');
+tt=[];
+function out1= primer(in1)
+mm= sqrt(in1);
+mm=mm+0.5;
+mm=round(mm);
+l=true;
+if in1==1
+    l=false;
+elseif in1==2
+    l=true;
+elseif in1==3
+    l=true;
+elseif in1==5
+    l=true;    
+elseif mod(in1,2)==0
+    l=false;
+elseif mod(in1,3)==0
+    l=false;
+elseif mod(in1,5)==0
+    l=false;
+else
+    for qq=2:mm
+        if mod(in1,qq)==0
+            l=false;
+        end
+    end
+end
+out1=l;
+end
+for i=1:in
+    m=primer(i);
+    if m==true
+        tt=[tt i];
+    end
+end
+%out=tt;
+out=numel(tt);
+end
